@@ -1,0 +1,29 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+**/logs/
+*.log
+
+# IDEs
+*.iml
+.idea/
+*.ipr
+*.iws
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Otros
+*.class
+*.jar
+*.war
+*.ear
+
+# Test reports
+/target/surefire-reports/
+/target/test-classes/
+
+# Configuración local
+.env
