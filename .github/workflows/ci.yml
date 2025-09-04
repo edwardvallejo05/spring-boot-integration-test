@@ -32,7 +32,7 @@ jobs:
         run: mvn clean test jacoco:report
 
       - name: Subir reporte JaCoCo como artifact de Pages
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: target/site/jacoco
 
