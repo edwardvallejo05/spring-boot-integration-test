@@ -40,7 +40,7 @@ jobs:
       - name: Subir reporte JaCoCo como artifact de Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/site/
+          path: target/
 
   deploy:
     needs: test-and-report
