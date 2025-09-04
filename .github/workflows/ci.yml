@@ -31,6 +31,9 @@ jobs:
       - name: Ejecutar pruebas y generar reporte JaCoCo
         run: mvn clean test jacoco:report
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
       - name: Subir reporte JaCoCo como artifact de Pages
         uses: actions/upload-pages-artifact@v3
         with:
@@ -40,9 +43,11 @@ jobs:
     needs: test-and-report
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
 
+
     steps:
       - name: Deploy a GitHub Pages
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
