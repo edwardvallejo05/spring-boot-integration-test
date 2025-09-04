@@ -29,7 +29,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Ejecutar pruebas y generar reporte JaCoCo
-        run: mvn clean test jacoco:report
+        run: mvn clean test jacoco:report surefire-report:report
 
       - name: Listar archivos de reporte
         run: ls -l target/site/jacoco
@@ -40,7 +40,7 @@ jobs:
       - name: Subir reporte JaCoCo como artifact de Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/site/jacoco
+          path: target/site/
 
   deploy:
     needs: test-and-report
