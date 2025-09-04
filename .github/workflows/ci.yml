@@ -1,0 +1,48 @@
+name: CI & Coverage
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cachear dependencias Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Ejecutar pruebas y generar reporte JaCoCo
+        run: mvn clean test jacoco:report
+
+      - name: Subir reporte JaCoCo como artifact de Pages
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: target/site/jacoco
+
+  deploy:
+    needs: test-and-report
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy a GitHub Pages
+        uses: actions/deploy-pages@v3

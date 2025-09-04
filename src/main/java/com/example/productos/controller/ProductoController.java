@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/productos")
 public class ProductoController {
@@ -19,6 +20,11 @@ public class ProductoController {
 
     public ProductoController(ProductoService service) {
         this.service = service;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     @GetMapping
@@ -53,4 +59,43 @@ public class ProductoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            String nombre = (String) body.get("nombre");
+            BigDecimal precio = new BigDecimal(body.get("precio").toString());
+            Integer stock = (Integer) body.get("stock");
+            Producto existente = service.obtenerPorId(id);
+            existente.setNombre(nombre);
+            existente.setPrecio(precio);
+            existente.setStock(stock);
+            Producto actualizado = service.actualizar(existente);
+            return ResponseEntity.ok(actualizado);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Producto> actualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            Producto existente = service.obtenerPorId(id);
+            if (body.containsKey("nombre")) {
+                existente.setNombre((String) body.get("nombre"));
+            }
+            if (body.containsKey("precio")) {
+                existente.setPrecio(new BigDecimal(body.get("precio").toString()));
+            }
+            if (body.containsKey("stock")) {
+                existente.setStock((Integer) body.get("stock"));
+            }
+            Producto actualizado = service.actualizar(existente);
+            return ResponseEntity.ok(actualizado);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    
 }

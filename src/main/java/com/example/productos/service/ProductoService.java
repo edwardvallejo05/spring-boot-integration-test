@@ -43,4 +43,38 @@ public class ProductoService {
         }
         repository.deleteById(id);
     }
+
+    public Producto actualizar(Producto producto) {
+        if (producto.getPrecio().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        }
+        if (producto.getStock() < 0) {
+            throw new IllegalArgumentException("El stock no puede ser negativo");
+        }
+        if (!repository.existsById(producto.getId())) {
+            throw new NotFoundException("Producto no encontrado: " + producto.getId());
+        }
+        return repository.save(producto);
+    }
+
+    public Producto actualizarParcial(Long id, String nombre, BigDecimal precio, Integer stock) {
+        Producto existente = obtenerPorId(id);
+
+        if (nombre != null) {
+            existente.setNombre(nombre);
+        }
+        if (precio != null) {
+            if (precio.compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("El precio no puede ser negativo");
+            }
+            existente.setPrecio(precio);
+        }
+        if (stock != null) {
+            if (stock < 0) {
+                throw new IllegalArgumentException("El stock no puede ser negativo");
+            }
+            existente.setStock(stock);
+        }
+        return repository.save(existente);
+    }
 }

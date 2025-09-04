@@ -13,14 +13,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class ProductoControllerIT {
+public class ProductoControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,6 +63,58 @@ class ProductoControllerIT {
     }
 
     @Test
+    void actualizarProducto() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("nombre", "Actualizado");
+        body.put("precio", 200.00);
+        body.put("stock", 8);
+
+        mockMvc.perform(put("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Actualizado"))
+                .andExpect(jsonPath("$.precio").value(200.00))
+                .andExpect(jsonPath("$.stock").value(8));
+    }
+
+    @Test
+    void actualizarProductoNoExistente() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("nombre", "Actualizado");
+        body.put("precio", 200.00);
+        body.put("stock", 8);
+
+        mockMvc.perform(put("/productos/99999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void actualizarParcialProducto() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("precio", 300.00);
+
+        mockMvc.perform(patch("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.precio").value(300.00));
+    }
+
+    @Test
+    void actualizarParcialProductoNoExistente() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("precio", 300.00);
+
+        mockMvc.perform(patch("/productos/99999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void obtenerProductoPorIdExistenteDevuelve200() throws Exception {
         mockMvc.perform(get("/productos/{id}", existingId))
                 .andExpect(status().isOk())
@@ -74,8 +128,102 @@ class ProductoControllerIT {
     }
 
     @Test
+    void crearProductoConPrecioNegativoDevuelve400() throws Exception {
+        var body = objectMapper.writeValueAsString(new HashMap<String, Object>() {{
+            put("nombre", "ProductoNegativo");
+            put("precio", -10.00);
+            put("stock", 5);
+        }});
+        mockMvc.perform(post("/productos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void crearProductoConStockNegativoDevuelve400() throws Exception {
+        var body = objectMapper.writeValueAsString(new HashMap<String, Object>() {{
+            put("nombre", "ProductoStockNegativo");
+            put("precio", 10.00);
+            put("stock", -2);
+        }});
+        mockMvc.perform(post("/productos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void actualizarProductoConPrecioNegativoDevuelve400() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("nombre", "Actualizado");
+        body.put("precio", -100.00);
+        body.put("stock", 8);
+
+        mockMvc.perform(put("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void actualizarProductoConStockNegativoDevuelve400() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("nombre", "Actualizado");
+        body.put("precio", 100.00);
+        body.put("stock", -8);
+
+        mockMvc.perform(put("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void actualizarParcialProductoConPrecioNegativoDevuelve400() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("precio", -300.00);
+
+        mockMvc.perform(patch("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void actualizarParcialProductoConStockNegativoDevuelve400() throws Exception {
+        Map<String, Object> body = new HashMap<>();
+        body.put("stock", -5);
+
+        mockMvc.perform(patch("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void eliminarProductoDevuelve204() throws Exception {
         mockMvc.perform(delete("/productos/{id}", existingId))
                 .andExpect(status().isNoContent());
+        assertThat(repository.findById(existingId)).isEmpty();
+    }
+
+    @Test
+    void eliminarProductoNoExistente() throws Exception {
+        mockMvc.perform(delete("/productos/99999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void actualizarParcialProductoConNombreExistenteDevuelve200() throws Exception {
+        // El producto creado en setUp tiene nombre "Laptop"
+        Map<String, Object> body = new HashMap<>();
+        body.put("nombre", "Laptop");
+
+        mockMvc.perform(patch("/productos/{id}", existingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Laptop"));
     }
 }

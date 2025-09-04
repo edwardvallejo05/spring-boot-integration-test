@@ -17,6 +17,19 @@ class ProductoRepositoryTest {
     private ProductoRepository repository;
 
     @Test
+    void buscarNombre() {
+        Optional<Producto> found = repository.findByNombre("Proyector");
+        assertThat(found).isPresent();
+        assertThat(found.get().getNombre()).isEqualTo("Proyector");
+    }
+
+    @Test
+    void buscarNombreNoExistente() {
+        Optional<Producto> found = repository.findByNombre("NoExiste");
+        assertThat(found).isEmpty();
+    }
+
+    @Test
     void guardarYBuscarPorId() {
         Producto p = new Producto("Teclado", new BigDecimal("99.99"), 10);
         Producto saved = repository.save(p);
@@ -26,10 +39,22 @@ class ProductoRepositoryTest {
     }
 
     @Test
+    void buscarIdNoExistente() {
+        Optional<Producto> found = repository.findById(Long.MAX_VALUE);
+        assertThat(found).isEmpty();
+    }
+
+    @Test
     void eliminarProducto() {
         Producto p = new Producto("Mouse", new BigDecimal("49.99"), 5);
         Producto saved = repository.save(p);
         repository.deleteById(saved.getId());
         assertThat(repository.findById(saved.getId())).isEmpty();
+    }
+
+    @Test
+    void eliminarNoExistente() {
+        repository.deleteById(Long.MAX_VALUE);
+        assertThat(repository.findById(Long.MAX_VALUE)).isEmpty();
     }
 }

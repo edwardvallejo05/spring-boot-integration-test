@@ -1,0 +1,10 @@
+INSERT INTO producto (nombre, precio, stock) VALUES ('Proyector', 1200.00, 3);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Router WiFi', 350.00, 8);
+INSERT INTO producto (nombre, precio, stock) VALUES ('SSD Externo', 180.00, 14);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Microfono USB', 89.99, 9);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Webcam HD', 75.00, 11);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Cargador Universal', 39.99, 17);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Silla Gamer', 299.00, 6);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Panel Solar', 499.00, 2);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Lámpara LED', 24.99, 20);
+INSERT INTO producto (nombre, precio, stock) VALUES ('Control Bluetooth', 59.99, 13);
