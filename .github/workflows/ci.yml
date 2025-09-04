@@ -31,6 +31,9 @@ jobs:
       - name: Ejecutar pruebas y generar reporte JaCoCo
         run: mvn clean test jacoco:report
 
+      - name: Listar archivos de reporte
+        run: ls -l target/site/jacoco
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
