@@ -29,9 +29,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Ejecutar pruebas y generar reporte JaCoCo
-        run: mvn clean test 
-        run: mvn jacoco:report
-        run: mvn surefire-report:report
+        run: mvn clean test && mvn jacoco:report && mvn surefire-report:report
 
       - name: Listar archivos de reporte
         run: ls -l target/site/jacoco
