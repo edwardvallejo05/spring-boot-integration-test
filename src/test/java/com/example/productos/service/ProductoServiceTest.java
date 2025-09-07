@@ -20,6 +20,7 @@ class ProductoServiceTest {
     @Autowired
     private ProductoRepository repository;
 
+    // Se agrega nuevo test para listar productos
     @Test
     void listarDevuelveProductos() {
         service.crear("Laptop", new BigDecimal("1200.00"), 2);
@@ -34,6 +35,16 @@ class ProductoServiceTest {
         assertThat(obtenido.getNombre()).isEqualTo("Monitor");
     }
 
+    // Se agrega nuevo test para crear un producto con datos válidos
+    @Test
+    void crearProductoConDatosValidos() {
+        Producto creado = service.crear("ProductoValido", new BigDecimal("100.00"), 5);
+        assertThat(creado).isNotNull();
+        assertThat(creado.getId()).isNotNull();
+        assertThat(creado.getNombre()).isEqualTo("ProductoValido");
+    }
+
+    // Se agregan nuevos test para validar las nuevas reglas de negocio y completar la cobertura al 100%
     @Test
     void crearProductoConPrecioNegativoLanzaException() {
         assertThatThrownBy(() -> service.crear("ProductoNegativo", new BigDecimal("-1.00"), 5))
@@ -62,6 +73,7 @@ class ProductoServiceTest {
                 .hasMessageContaining("Producto no encontrado");
     }
 
+    // Se agregan nuevos test para nuevos endpoints de actualizar productos
     @Test
     void actualizarProductoExistente() {
         Producto creado = service.crear("Tablet", new BigDecimal("299.99"), 7);

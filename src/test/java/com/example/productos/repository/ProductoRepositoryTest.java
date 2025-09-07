@@ -16,6 +16,7 @@ class ProductoRepositoryTest {
     @Autowired
     private ProductoRepository repository;
 
+    // Se agregan tests para completar la cobertura al 100% del repositorio ya que no existian
     @Test
     void buscarNombre() {
         Optional<Producto> found = repository.findByNombre("Proyector");

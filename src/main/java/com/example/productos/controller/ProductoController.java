@@ -22,6 +22,8 @@ public class ProductoController {
         this.service = service;
     }
 
+    // Se agrega método en el controlador que maneja las excepciones
+    // de tipo IllegalArgumentException que ocurren en los endpoints. HTTP400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
@@ -60,6 +62,7 @@ public class ProductoController {
         }
     }
 
+    //Se agrega el método para actualizar un producto completo
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         try {
@@ -77,6 +80,7 @@ public class ProductoController {
         }
     }
 
+    //Se agrega el método para actualizar un producto parcialmente
     @PatchMapping("/{id}")
     public ResponseEntity<Producto> actualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         try {

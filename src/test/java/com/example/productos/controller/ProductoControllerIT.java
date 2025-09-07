@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+// Se modifica la clase para que sea Publica y se pueda acceder a ella en los test
 public class ProductoControllerIT {
 
     @Autowired

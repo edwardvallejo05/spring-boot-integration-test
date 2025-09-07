@@ -28,10 +28,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Ejecutar pruebas y generar reporte JaCoCo
+      - name: Ejecutar pruebas y generar reporte surefire
         run: mvn clean test surefire-report:report
-      
-      - name: generar reporte JaCoCo
+
+      - name: generar reporte de Cobertura con JaCoCo
         run: mvn jacoco:report
 
       - name: Listar archivos de reporte

@@ -44,6 +44,7 @@ public class ProductoService {
         repository.deleteById(id);
     }
 
+    // Se agrega nuevo Método para actualizar un producto completo
     public Producto actualizar(Producto producto) {
         if (producto.getPrecio().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("El precio no puede ser negativo");
@@ -57,6 +58,7 @@ public class ProductoService {
         return repository.save(producto);
     }
 
+    // Se agrega nuevo Método para actualizar un producto parcialmente
     public Producto actualizarParcial(Long id, String nombre, BigDecimal precio, Integer stock) {
         Producto existente = obtenerPorId(id);
 

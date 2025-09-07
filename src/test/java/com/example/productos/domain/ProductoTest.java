@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductoTest {
 
+    // Se agregan tests para la clase Producto para completar la cobertura al 100% ya que no existian
     @Test
     void constructorYGetters() {
         Producto p = new Producto("Monitor", new BigDecimal("199.99"), 10);

@@ -22,6 +22,16 @@ mvn spring-boot:run
 mvn clean test
 ```
 
+## Generar reporte HTML de ejecucion de Prueba 
+```bash
+mvn surefire-report:report
+```
+
+## Generar reporte de Cobertura
+```bash
+mvn jacoco:report
+```
+
 ## Estructura clave
 ```
 src/
@@ -31,6 +41,9 @@ src/
  └─ test/
      ├─ java/com/example/productos/...   # pruebas (repo, servicio, controller)
      └─ resources/application-test.properties
+target/
+ ├─ site/jacoco/index.html
+ └─ reports/surefire.html
 ```
 
 ## Actividades sugeridas
