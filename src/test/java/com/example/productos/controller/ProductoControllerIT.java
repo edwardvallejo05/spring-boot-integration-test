@@ -63,6 +63,7 @@ public class ProductoControllerIT {
                 .andExpect(jsonPath("$.nombre").value("Auriculares"));
     }
 
+    // Se agregan nuevos para nuevos endpoints de actualizar productos 
     @Test
     void actualizarProducto() throws Exception {
         Map<String, Object> body = new HashMap<>();
@@ -128,6 +129,7 @@ public class ProductoControllerIT {
                 .andExpect(status().isNotFound());
     }
 
+    // Se agregan nuevos test para validar las nuevas reglas de negocio y completar la cobertura al 100%
     @Test
     void crearProductoConPrecioNegativoDevuelve400() throws Exception {
         var body = objectMapper.writeValueAsString(new HashMap<String, Object>() {{

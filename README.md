@@ -52,5 +52,5 @@ target/
 3. Se modifico el codigo para que las clases de las pruebas del controlador fueran publicas y se pudiese acceder a ellas
 4. Se configuraron plugins para generar reportes HTML de ejecucion de Pruebas con surefire y para medir la cobertura con JaCoCo.
 5. Se completa la creación de casos de pruebas para cubrir el 100% de codigo ejecutado
-5. Se integro un pipeline CI (GitHub Actions) que ejecute `mvn test` y que publica los reportes en github.
-6. 
+6. Se integro un pipeline CI (GitHub Actions) que ejecute `mvn test` y que publica los reportes en github.
+ 
